@@ -44,29 +44,27 @@ const storeItems = new Map([
 
 app.post('/create-checkout', async (req, res) => {
   try {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      mode: 'payment',
-      line_items: req.body.items.map(item => {
-        const storeItem = storeItems.get(item.id)
-        return {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: storeItem.name,
-            },
-            unit_amount: storeItem.priceInCents,
-          },
-          quantity: item.quantity,
-        }
-      }),
-      success_url: `${process.env.SERVER_URL}/checkout?ordersuccess=true`,
-      cancel_url: `${process.env.SERVER_URL}/checkout?ordersuccess=false`,
+    // Simulate basic order creation from request body
+    const order = {
+      items: req.body.items.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+      })),
+      customer: req.body.customer, // optional
+      total: req.body.total,
+      createdAt: new Date().toISOString(),
+    }
+
+    res.status(200).json({
+      message: 'Order successfully created',
+      order,
     })
-    res.json({ url: session.url })
   } catch (e) {
     res.status(500).json({ error: e.message })
   }
+
 })
 app.get('/create-charge', async (req, res) => {
   const orders = JSON.parse(req.query.params)
