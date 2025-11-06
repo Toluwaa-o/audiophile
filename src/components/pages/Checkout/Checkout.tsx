@@ -28,34 +28,23 @@ export const checkoutAction = async function ({
   try {
     let res
     let paymentUrl
-    if (paymentMethod === 'card') {
-      res = await fetch(
-        'https://audiophile-e-commerce-ashy.vercel.app/create-checkout',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            items: params.map(item => {
-              return { id: item.name, quantity: item.count }
-            }),
+    res = await fetch(
+      'https://audiophile-e-commerce-ashy.vercel.app/create-checkout',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: params.map(item => {
+            return { id: item.name, quantity: item.count }
           }),
-          credentials: 'include',
-        }
-      )
-      const data = await res.json()
-      paymentUrl = data.url
-    } else {
-      res = await fetch(
-        `https://audiophile-e-commerce-ashy.vercel.app/create-charge?params=${JSON.stringify(
-          params
-        )}&name=${userName}`,
-        { credentials: 'include' }
-      )
-      const data = await res.json()
-      paymentUrl = data.hosted_url
-    }
+        }),
+        credentials: 'include',
+      }
+    )
+    const data = await res.json()
+    paymentUrl = data.url
     if (!res.ok) {
       return res.json().then(json => Promise.reject(json))
     }
