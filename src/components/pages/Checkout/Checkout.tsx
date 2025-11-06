@@ -7,7 +7,6 @@ import {
   useNavigate,
   useSearchParams,
 } from 'react-router-dom'
-
 import '../../../sass/pages/checkout/checkout.scss'
 import OrderSuccess from '../../shared/OrderSuccess'
 import { Item } from '../../store/CartContextProvider'
@@ -197,7 +196,7 @@ const Checkout: React.FC = function () {
                 id="card"
                 required
               />
-              Pay with card
+              E-payment
             </label>
             <label htmlFor="crypto">
               <input
@@ -207,7 +206,7 @@ const Checkout: React.FC = function () {
                 id="crypto"
                 required
               />
-              Pay with crypto
+              Pay on delivery
             </label>
           </div>
         </div>
